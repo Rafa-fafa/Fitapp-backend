@@ -1,6 +1,7 @@
 package com.rafal.fitapp.management.controller;
 
 import com.rafal.fitapp.management.entity.Recipe;
+import com.rafal.fitapp.management.model.dto.RecipeDto;
 import com.rafal.fitapp.management.service.RecipeService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class RecipeRestController {
     }
 
     @GetMapping("/recipes")
-    public List<Recipe> findAll() {
+    public List<RecipeDto> findAll() {
         return recipeService.findAll();
     }
 
@@ -36,8 +37,8 @@ public class RecipeRestController {
     }
 
     @PostMapping("/recipe")
-    public Recipe save(@RequestBody Recipe recipe) {
-        recipeService.save(recipe);
-        return recipe;
+    public RecipeDto save(@RequestBody RecipeDto recipeDto) {
+        recipeService.save(recipeDto);
+        return recipeDto;
     }
 }

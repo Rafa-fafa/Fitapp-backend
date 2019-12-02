@@ -36,8 +36,10 @@ public class Recipe {
     private String description;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="recipe_id")
-    private List<Ingredient> ingredients =  new ArrayList<Ingredient>();
+    @JoinColumn(name = "recipe_id")
+    private List<Ingredient> ingredients = new ArrayList<Ingredient>();
 
+    @Column(name = "portions")
+    private Integer numberOfPortion;
 
 }

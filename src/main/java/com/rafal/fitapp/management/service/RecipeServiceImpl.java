@@ -4,6 +4,8 @@ import com.rafal.fitapp.management.dao.BasicIngredientRepository;
 import com.rafal.fitapp.management.entity.BasicIngredient;
 import com.rafal.fitapp.management.entity.Recipe;
 import com.rafal.fitapp.management.dao.RecipeRepository;
+import com.rafal.fitapp.management.model.dto.RecipeDto;
+import com.rafal.fitapp.management.model.mapper.RecipeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,8 @@ import java.util.Optional;
 @Service
 public class RecipeServiceImpl implements RecipeService {
 
+    @Autowired
+    private RecipeMapper recipeMapper;
     private RecipeRepository recipeRepository;
     private BasicIngredientRepository basicIngredientRepository;
 
@@ -24,8 +28,8 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public List<Recipe> findAll() {
-        return recipeRepository.findAll();
+    public List<RecipeDto> findAll() {
+         return recipeMapper.recipesToRecipeDtos(recipeRepository.findAll());
     }
 
     @Override
@@ -34,18 +38,19 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public void save(Recipe recipe) {
-        recipe.getIngredients().forEach(ingredient -> {
-            Optional<Long> ingId = Optional.ofNullable(basicIngredientRepository.findByName(ingredient.getName()).getId());
-            if (ingId.isPresent()) {
-                ingredient.setIngredientModelId(ingId.get());
-            } else {
-                BasicIngredient newIngredient = new BasicIngredient(ingredient.getName(), ingredient.getUnit());
-                newIngredient = basicIngredientRepository.save(newIngredient);
-                ingredient.setIngredientModelId(newIngredient.getId());
-                System.out.println("ssssdaaasdesssss");
-            }
-        });
+    public void save(RecipeDto recipeDto) {
+        Recipe recipe=recipeMapper.recipeDtoToRecipe(recipeDto);
+
+//        recipe.getIngredients().forEach(ingredient -> {
+//            Optional<Long> ingId = Optional.ofNullable(basicIngredientRepository.findByName(ingredient.getName()).getId());
+//            if (ingId.isPresent()) {
+//                ingredient.setIngredientModelId(ingId.get());
+//            } else {
+//                BasicIngredient newIngredient = new BasicIngredient(ingredient.getName(), ingredient.getUnit());
+//                newIngredient = basicIngredientRepository.save(newIngredient);
+//                ingredient.setIngredientModelId(newIngredient.getId());
+//            }
+//        });
 
         recipeRepository.save(recipe);
     }

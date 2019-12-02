@@ -1,13 +1,16 @@
 package com.rafal.fitapp.management.service;
 
 
-        import com.rafal.fitapp.management.entity.Recipe;
+import com.rafal.fitapp.management.entity.Recipe;
+import com.rafal.fitapp.management.model.dto.RecipeDto;
 
-        import java.util.List;
+import java.util.List;
 
 
 public interface RecipeService {
-    List<Recipe> findAll();
+    List<RecipeDto> findAll();
+
     Recipe findById(int id);
-    void save(Recipe recipe);
+
+    void save(RecipeDto recipeDto);
 }

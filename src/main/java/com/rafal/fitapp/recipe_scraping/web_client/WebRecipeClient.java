@@ -2,6 +2,8 @@ package com.rafal.fitapp.recipe_scraping.web_client;
 
 import com.rafal.fitapp.management.entity.Recipe;
 import com.rafal.fitapp.management.entity.Ingredient;
+import com.rafal.fitapp.management.model.dto.IngredientDto;
+import com.rafal.fitapp.management.model.dto.RecipeDto;
 import com.rafal.fitapp.recipe_scraping.utils.IngredientAssembler;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,16 +14,15 @@ import java.util.List;
 
 public class WebRecipeClient {
 
-    public static Recipe createRecipe(String url) {
+    public static RecipeDto createRecipe(String url) {
         Document webPage = getWebPage(url);
 
         String title = getTitle(webPage);
         String description = getDescription(webPage);
-        List<Ingredient> ingredients = getIngredients(webPage);
-        int portions = getNumberOfPortions(webPage);
+        List<IngredientDto> ingredients = getIngredients(webPage);
+        Integer portions = getNumberOfPortions(webPage);
 
-//        return new Recipe(title,description,ingredients,portions);
-    return  null;
+        return new RecipeDto(0,title,description,ingredients,portions);
     }
 
     private static Document getWebPage(String url) {
@@ -48,8 +49,12 @@ public class WebRecipeClient {
         return description.toString();
     }
 
-    private static int getNumberOfPortions(Document webPage) {
-        return Integer.valueOf(webPage.select("div.field-name-field-ilosc-porcji").first().text().split(" ")[0]);
+    private static Integer getNumberOfPortions(Document webPage) {
+        try {
+            return Integer.valueOf(webPage.select("div.field-name-field-ilosc-porcji").first().text().split(" ")[0]);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
 
@@ -58,16 +63,15 @@ public class WebRecipeClient {
     }
 
 
-    private static List<Ingredient> getIngredients(Document webPage) {
-        List<Ingredient> ingredients = new ArrayList<>();
+    private static List<IngredientDto> getIngredients(Document webPage) {
+        List<IngredientDto> ingredients = new ArrayList<>();
 
         webPage.select("div.field-name-field-skladniki")
                 .first()
                 .selectFirst("ul")
                 .children()
                 .forEach((ingredient) -> {
-                    Ingredient ing = IngredientAssembler.createIngredient(ingredient.text());
-                    ingredients.add(ing);
+                    ingredients.add(IngredientAssembler.createIngredient(ingredient.text()));
                 });
 
         return ingredients;
