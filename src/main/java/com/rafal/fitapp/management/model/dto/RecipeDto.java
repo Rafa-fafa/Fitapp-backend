@@ -16,6 +16,6 @@ public class RecipeDto {
     private String title;
     private String description;
     private List<IngredientDto> ingredients =  new ArrayList<>();
-    private Integer numberOfPortion;
+    private String numberOfPortion;
 
 }

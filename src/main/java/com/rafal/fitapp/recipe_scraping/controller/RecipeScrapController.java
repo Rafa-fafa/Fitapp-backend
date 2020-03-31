@@ -5,11 +5,9 @@ import com.rafal.fitapp.management.model.dto.RecipeDto;
 import com.rafal.fitapp.management.service.RecipeServiceImpl;
 import com.rafal.fitapp.recipe_scraping.web_client.WebRecipeClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/scrap")
 public class RecipeScrapController {
@@ -17,8 +15,8 @@ public class RecipeScrapController {
     @Autowired
     RecipeServiceImpl recipeService;
 
-    @PostMapping("/recipe")
-    public RecipeDto getScrappedRecipe(@RequestBody String url) {
+    @GetMapping("/recipe")
+    public RecipeDto getScrappedRecipe(@RequestParam String url) {
         RecipeDto recipeDto = WebRecipeClient.createRecipe(url);
         recipeService.save(recipeDto);
         return recipeDto;

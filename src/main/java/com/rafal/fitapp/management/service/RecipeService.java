@@ -9,8 +9,7 @@ import java.util.List;
 
 public interface RecipeService {
     List<RecipeDto> findAll();
-
     Recipe findById(int id);
-
     void save(RecipeDto recipeDto);
+    void delete(int recipeId);
 }

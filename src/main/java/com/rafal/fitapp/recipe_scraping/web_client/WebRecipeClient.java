@@ -7,10 +7,12 @@ import com.rafal.fitapp.management.model.dto.RecipeDto;
 import com.rafal.fitapp.recipe_scraping.utils.IngredientAssembler;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class WebRecipeClient {
 
@@ -20,7 +22,7 @@ public class WebRecipeClient {
         String title = getTitle(webPage);
         String description = getDescription(webPage);
         List<IngredientDto> ingredients = getIngredients(webPage);
-        Integer portions = getNumberOfPortions(webPage);
+        String portions = getNumberOfPortions(webPage);
 
         return new RecipeDto(0,title,description,ingredients,portions);
     }
@@ -43,18 +45,17 @@ public class WebRecipeClient {
                 .selectFirst("ul")
                 .children()
                 .forEach((paragraph) -> {
-                    description.append(paragraph.text()).append("\n");
+                    description.append(paragraph.text()).append("\\n");
                 });
 
         return description.toString();
     }
 
-    private static Integer getNumberOfPortions(Document webPage) {
-        try {
-            return Integer.valueOf(webPage.select("div.field-name-field-ilosc-porcji").first().text().split(" ")[0]);
-        } catch (NumberFormatException e) {
-            return null;
-        }
+    private static String getNumberOfPortions(Document webPage) {
+        return Optional.ofNullable(webPage.select("div.field-name-field-ilosc-porcji")
+                .first())
+                .map(Element::text)
+                .orElse(null);
     }
 
 
@@ -70,7 +71,7 @@ public class WebRecipeClient {
                 .first()
                 .selectFirst("ul")
                 .children()
-                .forEach((ingredient) -> {
+                .forEach(ingredient -> {
                     ingredients.add(IngredientAssembler.createIngredient(ingredient.text()));
                 });
 
