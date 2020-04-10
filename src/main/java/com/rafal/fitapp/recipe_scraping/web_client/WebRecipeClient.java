@@ -1,7 +1,5 @@
 package com.rafal.fitapp.recipe_scraping.web_client;
 
-import com.rafal.fitapp.management.entity.Recipe;
-import com.rafal.fitapp.management.entity.Ingredient;
 import com.rafal.fitapp.management.model.dto.IngredientDto;
 import com.rafal.fitapp.management.model.dto.RecipeDto;
 import com.rafal.fitapp.recipe_scraping.utils.IngredientAssembler;
