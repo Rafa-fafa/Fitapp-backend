@@ -40,6 +40,6 @@ public class Recipe {
     private List<Ingredient> ingredients = new ArrayList<Ingredient>();
 
     @Column(name = "portions")
-    private Integer numberOfPortion;
+    private String portions;
 
 }

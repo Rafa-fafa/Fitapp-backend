@@ -26,8 +26,6 @@ public class RecipeScrapController {
 
     @GetMapping("/recipe")
     public RecipeDto getScrappedRecipe(@RequestParam String url) {
-        RecipeDto recipeDto = scrapperContext.getRecipe(url);
-        recipeService.save(recipeDto);
-        return recipeDto;
+        return scrapperContext.getRecipe(url);
     }
 }

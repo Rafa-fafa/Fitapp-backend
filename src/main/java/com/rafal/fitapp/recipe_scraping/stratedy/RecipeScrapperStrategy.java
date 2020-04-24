@@ -2,6 +2,7 @@ package com.rafal.fitapp.recipe_scraping.stratedy;
 
 import com.rafal.fitapp.management.model.dto.IngredientDto;
 import com.rafal.fitapp.management.model.dto.RecipeDto;
+import com.rafal.fitapp.management.model.dto.SubDescriptionDto;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -13,7 +14,7 @@ public interface RecipeScrapperStrategy {
 
     String getTitle(Document webPage);
 
-    String getDescription(Document webPage);
+    List<SubDescriptionDto> getSubDescription(Document webPage);
 
     List<IngredientDto> getIngredients(Document webPage);
 

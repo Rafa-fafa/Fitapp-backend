@@ -2,21 +2,16 @@ package com.rafal.fitapp.recipe_scraping.stratedy;
 
 import com.rafal.fitapp.management.model.dto.IngredientDto;
 import com.rafal.fitapp.management.model.dto.RecipeDto;
+import com.rafal.fitapp.management.model.dto.SubDescriptionDto;
 import org.jsoup.nodes.Document;
 
 import java.util.List;
 
 public class AllRecipeScrapperImpl implements RecipeScrapperStrategy {
+
     @Override
     public RecipeDto getRecipe(String url) {
-        Document webPage = getWebPage(url);
-
-        String title = getTitle(webPage);
-        String description = getDescription(webPage);
-        List<IngredientDto> ingredients = getIngredients(webPage);
-        String portions = getPortions(webPage);
-
-        return new RecipeDto(0,title,description,ingredients,portions);
+        return null;
     }
 
     @Override
@@ -25,7 +20,7 @@ public class AllRecipeScrapperImpl implements RecipeScrapperStrategy {
     }
 
     @Override
-    public String getDescription(Document webPage) {
+    public List<SubDescriptionDto> getSubDescription(Document webPage) {
         return null;
     }
 

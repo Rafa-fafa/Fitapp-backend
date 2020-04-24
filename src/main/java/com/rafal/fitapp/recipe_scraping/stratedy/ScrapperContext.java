@@ -20,7 +20,7 @@ public class ScrapperContext {
         if(url.contains(KWESTIA_SMAKU)){
                 this.recipeScrapperStrategy = new KwestiaSmakuScrapperImpl();
         }else if(url.contains(ALL_RECIPES)){
-                this.recipeScrapperStrategy = new KwestiaSmakuScrapperImpl();
+                this.recipeScrapperStrategy = new AllRecipeScrapperImpl();
         }
     }
 }
