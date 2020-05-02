@@ -2,7 +2,6 @@ package com.rafal.fitapp.recipe_scraping.stratedy;
 
 import com.rafal.fitapp.management.model.dto.IngredientDto;
 import com.rafal.fitapp.management.model.dto.RecipeDto;
-import com.rafal.fitapp.management.model.dto.SubDescriptionDto;
 import com.rafal.fitapp.recipe_scraping.utils.IngredientAssembler;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,7 +17,7 @@ public class KwestiaSmakuScrapperImpl implements RecipeScrapperStrategy {
 
         return RecipeDto.builder()
                 .title(getTitle(webPage))
-                .subDescriptions(getSubDescription(webPage))
+                .description(getDescription(webPage))
                 .ingredients(getIngredients(webPage))
                 .portions(getPortions(webPage))
                 .sourceUrl(url)
@@ -30,32 +29,42 @@ public class KwestiaSmakuScrapperImpl implements RecipeScrapperStrategy {
         return webPage.select("h1.przepis").first().text();
     }
 
+
     @Override
-    public List<SubDescriptionDto> getSubDescription(Document webPage) {
-        List<SubDescriptionDto> subDescriptions = new ArrayList<>();
+    public String getDescription(Document webPage) {
+        StringBuilder description = new StringBuilder();
 
-        List<Element> elements = webPage.select("div.field-name-field-przygotowanie")
+
+        webPage.select("div.field-name-field-przygotowanie")
                 .first()
-                .children();
+                .children()
+                .forEach(element -> {
+                    description.append(createDescriptionDependingOnHtmlTag(element))
+                            .append("\\n");
+                });
 
-        for (int i = 0; i < elements.size(); i += 2) {
-            SubDescriptionDto subDescription = SubDescriptionDto.builder()
-                    .subDescriptionTitle(elements.get(i).text())
-                    .description(createDescription(elements.get(i + 1)))
-                    .build();
-            subDescriptions.add(subDescription);
-        }
-
-        return subDescriptions;
+        return description.toString();
     }
 
-    private String createDescription(Element element) {
-        StringBuilder description =  new StringBuilder();
+
+    private String createDescriptionDependingOnHtmlTag(Element element) {
+        if (element.is("div")) {
+            return element.text();
+        } else if (element.is("ul")) {
+            return createDescriptionOutOfBulletPoints(element);
+        }else {
+            return null;
+        }
+    }
+
+    private String createDescriptionOutOfBulletPoints(Element element) {
+        StringBuilder subDescription = new StringBuilder();
         element.children()
                 .forEach((paragraph) -> {
-                    description.append(paragraph.text()).append("\\n");
+                    subDescription.append(paragraph.text())
+                            .append("\\n");
                 });
-        return description.toString();
+        return subDescription.toString();
     }
 
     @Override
@@ -80,4 +89,5 @@ public class KwestiaSmakuScrapperImpl implements RecipeScrapperStrategy {
                 .map(Element::text)
                 .orElse(null);
     }
+
 }

@@ -2,7 +2,6 @@ package com.rafal.fitapp.recipe_scraping.web_client;
 
 import com.rafal.fitapp.management.model.dto.IngredientDto;
 import com.rafal.fitapp.management.model.dto.RecipeDto;
-import com.rafal.fitapp.management.model.dto.SubDescriptionDto;
 import com.rafal.fitapp.recipe_scraping.utils.IngredientAssembler;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,7 +19,6 @@ public class WebRecipeClient {
 
         return RecipeDto.builder()
                 .title(getTitle(webPage))
-                .subDescriptions(getDescription(webPage))
                 .ingredients(getIngredients(webPage))
                 .portions(getNumberOfPortions(webPage))
                 .sourceUrl(url)
@@ -37,7 +35,7 @@ public class WebRecipeClient {
         return webPage;
     }
 
-    private static List<SubDescriptionDto> getDescription(Document webPage) {
+    private static String getDescription(Document webPage) {
         StringBuilder description = new StringBuilder();
 
         webPage.select("div.field-name-field-przygotowanie")
@@ -48,7 +46,7 @@ public class WebRecipeClient {
                     description.append(paragraph.text()).append("\\n");
                 });
 
-        return null;
+        return description.toString();
     }
 
     private static String getNumberOfPortions(Document webPage) {
