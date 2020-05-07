@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class KwestiaSmakuScrapperImpl implements RecipeScrapperStrategy {
+
     @Override
     public RecipeDto getRecipe(String url) {
         Document webPage = getWebPage(url);
@@ -46,27 +47,6 @@ public class KwestiaSmakuScrapperImpl implements RecipeScrapperStrategy {
         return description.toString();
     }
 
-
-    private String createDescriptionDependingOnHtmlTag(Element element) {
-        if (element.is("div")) {
-            return element.text();
-        } else if (element.is("ul")) {
-            return createDescriptionOutOfBulletPoints(element);
-        }else {
-            return null;
-        }
-    }
-
-    private String createDescriptionOutOfBulletPoints(Element element) {
-        StringBuilder subDescription = new StringBuilder();
-        element.children()
-                .forEach((paragraph) -> {
-                    subDescription.append(paragraph.text())
-                            .append("\\n");
-                });
-        return subDescription.toString();
-    }
-
     @Override
     public List<IngredientDto> getIngredients(Document webPage) {
         List<IngredientDto> ingredients = new ArrayList<>();
@@ -89,5 +69,26 @@ public class KwestiaSmakuScrapperImpl implements RecipeScrapperStrategy {
                 .map(Element::text)
                 .orElse(null);
     }
+
+    private String createDescriptionDependingOnHtmlTag(Element element) {
+        if (element.is("div")) {
+            return element.text();
+        } else if (element.is("ul")) {
+            return createDescriptionOutOfBulletPoints(element);
+        }else {
+            return null;
+        }
+    }
+
+    private String createDescriptionOutOfBulletPoints(Element element) {
+        StringBuilder subDescription = new StringBuilder();
+        element.children()
+                .forEach((paragraph) -> {
+                    subDescription.append(paragraph.text())
+                            .append("\\n");
+                });
+        return subDescription.toString();
+    }
+
 
 }

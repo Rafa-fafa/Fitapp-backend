@@ -6,6 +6,8 @@ import com.rafal.fitapp.management.entity.Recipe;
 import com.rafal.fitapp.management.model.dto.RecipeDto;
 import com.rafal.fitapp.management.model.mapper.RecipeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -27,7 +29,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public List<RecipeDto> findAll() {
-         return recipeMapper.recipesToRecipeDtos(recipeRepository.findAll());
+        return recipeMapper.recipesToRecipeDtos(recipeRepository.findAll());
     }
 
     @Override
@@ -36,13 +38,26 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public void save(RecipeDto recipeDto) {
-        Recipe recipe=recipeMapper.recipeDtoToRecipe(recipeDto);
+    public ResponseEntity<?> save(RecipeDto recipeDto) {
+        if (!recipeRepository.existsRecipeByTitle(recipeDto.getTitle())) {
+            saveRecipe(recipeDto);
+            return new ResponseEntity<>(recipeDto, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(getRecipeExistsMessage(recipeDto),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void saveRecipe(RecipeDto recipeDto) {
+        Recipe recipe = recipeMapper.recipeDtoToRecipe(recipeDto);
         recipeRepository.save(recipe);
     }
 
+    private String getRecipeExistsMessage(RecipeDto recipeDto) {
+        return String.format("Recipe '%s' already exists",recipeDto.getTitle());
+    }
+
     @Override
-    public void delete(int recipeId){
+    public void delete(int recipeId) {
         recipeRepository.deleteById(recipeId);
     }
 }

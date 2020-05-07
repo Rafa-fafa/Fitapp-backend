@@ -14,7 +14,7 @@ public interface RecipeScrapperStrategy {
 
     String getTitle(Document webPage);
 
-    List<SubDescriptionDto> getSubDescription(Document webPage);
+    String getDescription(Document webPage);
 
     List<IngredientDto> getIngredients(Document webPage);
 

@@ -20,7 +20,7 @@ public class AllRecipeScrapperImpl implements RecipeScrapperStrategy {
     }
 
     @Override
-    public List<SubDescriptionDto> getSubDescription(Document webPage) {
+    public String getDescription(Document webPage) {
         return null;
     }
 

@@ -5,6 +5,7 @@ import com.rafal.fitapp.management.model.dto.RecipeDto;
 import com.rafal.fitapp.management.service.RecipeService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,9 +35,8 @@ public class RecipeRestController {
     }
 
     @PostMapping("/recipe")
-    public RecipeDto save(@RequestBody RecipeDto recipeDto) {
-        recipeService.save(recipeDto);
-        return recipeDto;
+    public ResponseEntity<?> save(@RequestBody RecipeDto recipeDto) {
+        return recipeService.save(recipeDto);
     }
 
     @DeleteMapping("/recipe/{recipeId}")
