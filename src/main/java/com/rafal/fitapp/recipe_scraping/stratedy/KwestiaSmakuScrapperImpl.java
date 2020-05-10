@@ -53,8 +53,7 @@ public class KwestiaSmakuScrapperImpl implements RecipeScrapperStrategy {
 
         webPage.select("div.field-name-field-skladniki")
                 .first()
-                .selectFirst("ul")
-                .children()
+                .select("li")
                 .forEach(ingredient -> {
                     ingredients.add(IngredientAssembler.createIngredient(ingredient.text()));
                 });

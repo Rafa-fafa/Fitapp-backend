@@ -8,14 +8,14 @@ public class IngredientAssembler {
     public static final String SZT="szt.";
 
 
-    public static IngredientDto createIngredient(String ingredientString) {
-        String[] ingredientAtributes = ingredientString.split(" ");
+    public static IngredientDto createIngredient(String ingredient) {
+        String[] ingredientAtributes = ingredient.split(" ");
         Integer amount;
         String unit;
         String name;
 
         if (!NumberUtils.isCreatable(ingredientAtributes[0])) {
-            return new IngredientDto(null,null, ingredientString);
+            return new IngredientDto(null,null, ingredient);
         }
 
         if (ingredientAtributes.length == 2) {
